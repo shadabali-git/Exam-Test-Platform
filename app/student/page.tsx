@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { supabase, type Test } from "../../lib/supabase"
+import { supabase, type Test } from "@/lib/supabaseClient"
 import { Play, Calendar, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -25,7 +25,7 @@ export default function StudentPage() {
     const { data, error } = await supabase.from("tests").select("*").order("created_at", { ascending: false })
 
     if (error) {
-      toast("Failed to fetch tests")
+      toast.error("Failed to fetch tests")
     } else {
       setTests(data || [])
     }

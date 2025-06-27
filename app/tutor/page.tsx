@@ -8,29 +8,10 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Badge } from "@/components/ui/badge"
-import {type Test } from "../../lib/supabase"
+import { type Test, supabase } from "@/lib/supabaseClient"
 import { Plus, Save, Trash2, Eye, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
-
-import { createClient } from '@/lib/supabase'
-import { cookies } from 'next/headers'
-
-export default async function Page() {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
-
-  const { data: todos } = await supabase.from('todos').select()
-
-  return (
-    <ul>
-      {todos?.map((todo) => (
-        <li>{todo}</li>
-      ))}
-    </ul>
-  )
-}
-
 
 type Question = {
   id: string
@@ -55,14 +36,22 @@ export default function TutorPage() {
   }, [])
 
   const fetchTests = async () => {
-    const { data, error } = await supabase.from("tests").select("*").order("created_at", { ascending: false })
+  const { data, error } = await supabase
+    .from("tests")
+    .select("*")
+    .order("created_at", { ascending: false })
 
-    if (error) {
-      toast("Failed to fetch tests")
-    } else {
-      setTests(data || [])
-    }
+  if (error) {
+    toast("Failed to fetch tests")
+    console.error("Supabase fetch error:", error)
+  } else if (Array.isArray(data)) {
+    setTests(data)
+  } else {
+    console.warn("Unexpected response:", data)
+    setTests([]) // fallback
   }
+}
+
 
   const addQuestion = () => {
     const newQuestion: Question = {
@@ -87,12 +76,12 @@ export default function TutorPage() {
 
   const saveTest = async () => {
     if (!testName.trim()) {
-      toast("Please enter a test name")
+      toast.info("Please enter a test name")
       return
     }
 
     if (questions.length === 0) {
-      toast("Please add at least one question")
+      toast.warning("Please add at least one question")
       return
     }
 
@@ -103,7 +92,7 @@ export default function TutorPage() {
     )
 
     if (incompleteQuestions.length > 0) {
-      toast("Please complete all questions and options")
+      toast.warning("Please complete all questions and options")
       return
     }
 
@@ -137,7 +126,7 @@ export default function TutorPage() {
 
       if (questionsError) throw questionsError
 
-      toast("Test created successfully!")
+      toast.success("Test created successfully!")
 
       // Reset form
       setTestName("")
@@ -147,7 +136,7 @@ export default function TutorPage() {
       fetchTests()
     } catch (error) {
       console.log("Error saving test:", error)
-      toast("Failed to save test")
+      toast.error("Failed to save test")
     } finally {
       setLoading(false)
     }
