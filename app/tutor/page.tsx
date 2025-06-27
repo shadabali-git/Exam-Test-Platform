@@ -23,7 +23,7 @@ type Question = {
   correct_answer: "A" | "B" | "C" | "D"
 }
 
-export default function TutorPage() {
+const TutorPage=()=>{
   const [tests, setTests] = useState<Test[]>([])
   const [isCreating, setIsCreating] = useState(false)
   const [testName, setTestName] = useState("")
@@ -361,3 +361,5 @@ export default function TutorPage() {
     </div>
   )
 }
+
+export default TutorPage
