@@ -12,6 +12,7 @@ import { supabase, type Test, type Question } from "@/lib/supabaseClient"
 import { Clock, CheckCircle, XCircle, ArrowLeft, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
+import YourTestComponent from "./TextCode" 
 
 export default function TestPage() {
   const params = useParams()
@@ -94,8 +95,8 @@ export default function TestPage() {
 
     try {
       const audio = new Audio("/sounds/timer.mp3")
-      await audio.play().catch(() => {})
-    } catch (e) {}
+      await audio.play().catch(() => { })
+    } catch (e) { }
 
     setIsSubmitted(true)
     setSubmitting(false)
@@ -186,7 +187,7 @@ export default function TestPage() {
           <Card className="mb-8">
             <CardHeader>
               <CardTitle>Question {currentQuestionIndex + 1}</CardTitle>
-              <CardDescription>{currentQuestion.question_text}</CardDescription>
+              <YourTestComponent currentQuestion={currentQuestion} />
             </CardHeader>
             <CardContent>
               <RadioGroup
@@ -230,7 +231,7 @@ export default function TestPage() {
                 <ArrowLeft className="w-4 h-4" /> Previous
               </Button>
               {showResult && currentQuestionIndex < questions.length - 1 ? (
-                <Button onClick={() => { nextQuestion(); setShowResult(false)}}>
+                <Button onClick={() => { nextQuestion(); setShowResult(false) }}>
                   Next <ArrowRight className="w-4 h-4" />
                 </Button>
               ) : (
