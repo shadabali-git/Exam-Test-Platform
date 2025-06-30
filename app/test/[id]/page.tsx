@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useParams, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
@@ -222,6 +222,20 @@ export default function TestPage() {
                   )
                 })}
               </RadioGroup>
+              <CardFooter className="mt-4">
+                {showResult && (
+                  <div className="text-sm text-black dark:text-gray-400">
+                    {currentQuestion.correct_answer && (
+                      <p className="mb-2">
+                        Correct Answer: <span className="font-semibold">{currentQuestion.correct_answer}</span>
+                      </p>
+                    )}
+                    {currentQuestion.explanation && (
+                      <p className="italic">Explanation: {currentQuestion.explanation}</p>
+                    )}
+                  </div>
+                )}
+              </CardFooter>
             </CardContent>
           </Card>
 
