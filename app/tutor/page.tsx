@@ -21,6 +21,7 @@ type Question = {
   option_c: string
   option_d: string
   correct_answer: "A" | "B" | "C" | "D"
+  explanation: string
 }
 
 const TutorPage=()=>{
@@ -62,6 +63,7 @@ const TutorPage=()=>{
       option_c: "",
       option_d: "",
       correct_answer: "A",
+      explanation: "",
     }
     setQuestions([...questions, newQuestion])
   }
@@ -120,6 +122,7 @@ const TutorPage=()=>{
         option_c: q.option_c,
         option_d: q.option_d,
         correct_answer: q.correct_answer,
+        explanation: q.explanation // Handle optional explanation
       }))
 
       const { error: questionsError } = await supabase.from("questions").insert(questionsToInsert)
@@ -272,6 +275,14 @@ const TutorPage=()=>{
                           <Label htmlFor={`${question.id}-D`}>D</Label>
                         </div>
                       </RadioGroup>
+                    </div>
+                    <div>
+                      <Label>Explanation (Optional)</Label>
+                      <Textarea
+                        value={question.explanation}
+                        onChange={(e) => updateQuestion(question.id, "explanation", e.target.value)}
+                        placeholder="Enter explanation for the correct answer"
+                      />
                     </div>
                   </CardContent>
                 </Card>

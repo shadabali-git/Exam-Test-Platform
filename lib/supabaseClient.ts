@@ -23,6 +23,7 @@ export type Question = {
   option_d: string
   correct_answer: "A" | "B" | "C" | "D"
   created_at: string
+  explanation:string
 }
 
 export type TestAttempt = {
