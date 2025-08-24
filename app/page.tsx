@@ -1,28 +1,29 @@
+"use client"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { BookOpen, Users, PlusCircle, Play } from "lucide-react"
+import { useEffect, useState } from "react"
+// import { logout } from "../app/login/action"
 
-import { createClient } from "@/lib/supabase/server"
-import { logout } from "../app/login/action"
+export default function HomePage() {
 
-export default async function HomePage() {
-  const supabase = await createClient()
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const [isLogin,setIsLogin]=useState<null|string>(null);
 
+ useEffect(() => {
+    const item = localStorage.getItem('data')
+    setIsLogin(item ?? null)
+  }, [])
+ 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4 py-8">
         {/* Top-right auth controls */}
         <div className="flex justify-end mb-4">
-          {session ? (
-            <form action={logout}>
-              <Button type="submit" variant="destructive">
+          {isLogin? (
+              <Button type="submit" variant="destructive" onClick={()=>{localStorage.removeItem('data'); setIsLogin(null)}}>
                 Logout
               </Button>
-            </form>
           ) : (
             <Link href="/login">
               <Button>Login</Button>
